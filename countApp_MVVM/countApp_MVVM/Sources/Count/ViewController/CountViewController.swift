@@ -6,6 +6,10 @@
 //
 
 import UIKit
+import RxCocoa
+import RxSwift
+import RxRelay
+
 
 class CountViewController: UIViewController {
 
@@ -29,6 +33,8 @@ class CountViewController: UIViewController {
         return button
     }()
 
+    private let viewModel = CountViewModel()
+    private let disposeBag = DisposeBag()
 
 
     override func viewDidLoad() {
@@ -38,6 +44,7 @@ class CountViewController: UIViewController {
         view.addSubview(countUpText)
         view.addSubview(incrementButton)
 
+        bindToViewModel()
     }
 
     override func viewWillLayoutSubviews() {
@@ -55,8 +62,15 @@ class CountViewController: UIViewController {
     }
 
     @objc private func didTapIncrementButton() {
-        print("tapped")
+        viewModel.tappedIncrementButton.accept(())
     }
 
+    private func bindToViewModel() {
+        viewModel.incremented
+            .subscribe(with: self) { incrementedNumber in
+                self.countUpText.text = String(incrementedNumber)
+            }
+            .disposed(by: disposeBag)
+    }
 }
 

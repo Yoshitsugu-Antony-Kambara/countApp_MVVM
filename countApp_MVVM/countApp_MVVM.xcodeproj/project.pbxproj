@@ -213,7 +213,6 @@
 				2CBA1E0B04DB448B9BFF39A6 /* Pods-countApp_MVVMTests.debug.xcconfig */,
 				B971B9AE359A4F62F93C421A /* Pods-countApp_MVVMTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
