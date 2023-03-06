@@ -6,14 +6,17 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
-class CountViewController: UIViewController {
+final class CountViewController: UIViewController {
 
-    private lazy var countUpText: UILabel = {
+    private lazy var counterLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "0"    //TODO: - 消す
         label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.textColor = .black
+        label.textAlignment = .center
         return label
     }()
 
@@ -23,39 +26,60 @@ class CountViewController: UIViewController {
         button.setTitle("+", for: UIControl.State())
         button.titleLabel?.font = .boldSystemFont(ofSize: 40)
         button.setTitleColor(UIColor.blue, for: UIControl.State())
-        button.addTarget(self, action: #selector(didTapIncrementButton), for: .touchUpInside)
-        button.frame.size.width = 100
-        button.frame.size.height = 50
         return button
     }()
 
+    private let disposeBag = DisposeBag()
 
+    private let viewModel: CountViewModel
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        self.viewModel = .init()
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init(coder: NSCoder) {
+        fatalError()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         view.backgroundColor = .white
-        view.addSubview(countUpText)
+        view.addSubview(counterLabel)
         view.addSubview(incrementButton)
 
+        addRxObserver()
     }
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         NSLayoutConstraint.activate([
-            countUpText.topAnchor.constraint(equalTo: view.topAnchor),
-            countUpText.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            countUpText.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            counterLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            counterLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            counterLabel.widthAnchor.constraint(equalTo: view.widthAnchor),
+            counterLabel.heightAnchor.constraint(equalToConstant: 50),
         ])
+
         NSLayoutConstraint.activate([
-            incrementButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 50),
-            incrementButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            incrementButton.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            incrementButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
+            incrementButton.topAnchor.constraint(equalTo: counterLabel.bottomAnchor, constant: 10),
+            incrementButton.widthAnchor.constraint(equalToConstant: 100),
+            incrementButton.heightAnchor.constraint(equalToConstant: 50),
         ])
     }
 
-    @objc private func didTapIncrementButton() {
-        print("tapped")
+    private func addRxObserver() {
+        // input
+        incrementButton.rx.tap.asObservable()
+            .bind(to: viewModel.input.didTapIncrementButton)
+            .disposed(by: disposeBag)
+
+        // output
+        viewModel.output.counter
+            .subscribe(with: self, onNext: { owner, counter in
+                owner.counterLabel.text = counter
+            })
+            .disposed(by: disposeBag)
     }
 
 }

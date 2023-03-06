@@ -6,7 +6,18 @@
 //
 
 import UIKit
+import RxSwift
+import RxRelay
 
-class CountModel {
+struct CountModel {
 
+    var number: Int
+
+    init(number: Int) {
+        self.number = number
+    }
+
+    mutating func incrementNumber() {
+        self.number = number + 1
+    }
 }

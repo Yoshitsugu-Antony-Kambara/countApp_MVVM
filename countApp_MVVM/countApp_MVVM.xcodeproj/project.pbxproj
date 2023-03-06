@@ -119,7 +119,6 @@
 			isa = PBXGroup;
 			children = (
 				1EECFD5C29B4EE6E003BB13A /* Delegates */,
-				1EECFD5B29B4EE46003BB13A /* Resources */,
 				1EECFD5A29B4EE37003BB13A /* Sources */,
 				1EECFD3129B4E94C003BB13A /* Assets.xcassets */,
 				1EECFD3329B4E94C003BB13A /* LaunchScreen.storyboard */,
@@ -151,13 +150,6 @@
 				1EECFD5D29B4EEC6003BB13A /* Count */,
 			);
 			path = Sources;
-			sourceTree = "<group>";
-		};
-		1EECFD5B29B4EE46003BB13A /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		1EECFD5C29B4EE6E003BB13A /* Delegates */ = {
@@ -213,7 +205,6 @@
 				2CBA1E0B04DB448B9BFF39A6 /* Pods-countApp_MVVMTests.debug.xcconfig */,
 				B971B9AE359A4F62F93C421A /* Pods-countApp_MVVMTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
